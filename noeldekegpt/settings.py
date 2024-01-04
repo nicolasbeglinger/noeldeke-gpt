@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'chat',
 ]
 
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = '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'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

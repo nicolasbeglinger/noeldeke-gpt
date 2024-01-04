@@ -38,8 +38,19 @@
     button:hover {
         background-color: #4cae4c;
     }
-</style>
 
+    .message-box {
+        background-color: white;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px 0;
+        text-align: left;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
 
 <html>
 <head>
@@ -53,6 +64,11 @@
         <textarea name="user_input" placeholder="Frag mich etwas..." rows="4" cols="50"></textarea>
         <button type="submit">Send</button>
     </form>
-    <p>Response: {{ response }}</p>
+    <div class="message-box">
+        <p>Frage: {{ user_input }}</p>
+    </div>
+    <div class="message-box">
+        <p>Antwort: {{ response }}</p>
+    </div>
 </body>
 </html>

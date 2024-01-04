@@ -6,6 +6,7 @@ client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 def index(request):
     response_message = ""
+    user_input = ""
     
     # Read the handbook file
     with open('chat/handbuch.txt', 'r') as file:
@@ -32,4 +33,4 @@ def index(request):
         except Exception as e:
             response_message = f"An error occurred: {str(e)}"
 
-    return render(request, 'chat/index.html', {'response': response_message})
+    return render(request, 'chat/index.html', {'user_input': user_input, 'response': response_message})
