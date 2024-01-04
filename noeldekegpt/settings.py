@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-15ub0v16g25elwig-mo939uzuz&&engejpixili-yxy-diig6=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['nbeglinger.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'chat',
 ]
 
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = ''
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
