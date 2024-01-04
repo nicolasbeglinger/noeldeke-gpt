@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        text-align: center;
+        padding: 20px;
+    }
+
+    h1, h2 {
+        color: #444;
+    }
+
+    form {
+        margin: 20px auto;
+        width: 80%;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box; /* So that width includes padding */
+    }
+
+    button {
+        background-color: #5cb85c;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #4cae4c;
+    }
+</style>
+
+
+<html>
+<head>
+    <title>NöldekeGPT</title>
+</head>
+<body>
+    <h1>NöldekeGPT</h1>
+    <h2>Ich helfe Gästen des Nöldeke in Braunwald mit Informationen aus dem Handbuch (Version: 4.3). Verbesserungsvorschläge können gerne Nicolas gemeldet werden.</h2>
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="user_input" placeholder="Frag mich etwas..." rows="4" cols="50"></textarea>
+        <button type="submit">Send</button>
+    </form>
+    <p>Response: {{ response }}</p>
+</body>
+</html>
