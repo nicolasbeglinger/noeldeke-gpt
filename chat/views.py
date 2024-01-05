@@ -1,36 +1,58 @@
 from django.shortcuts import render
 from django.conf import settings
 from openai import OpenAI
+import time
+import markdown2
+import re
+
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 def index(request):
     response_message = ""
     user_input = ""
-    
-    # Read the handbook file
-    with open('chat/handbuch.txt', 'r') as file:
-        handbuch = file.read()
-    
-    with open('chat/rules.txt', 'r') as file:
-        rules = file.read()
 
     if request.method == "POST":
         user_input = request.POST.get('user_input')
+        print("user_input: ", user_input)
 
-        # Combining handbook context with user input
-        combined_input = rules + "\n\n" + handbuch + "\n\nQuery:\n" + user_input
+        # Create an Assistant
+        noeldekegpt = client.beta.assistants.retrieve("asst_aXieuBEQXmx4yovAGO7VYzxL")
 
-        try:
-            completion = client.chat.completions.create(
-                model="gpt-4-1106-preview",
-                messages = [
-                    {'role': 'user', 'content': combined_input}
-                ],
-                temperature = 0  )
-            response_message = completion.choices[0].message.content
+        # Create a Thread
+        my_thread = client.beta.threads.create()
 
-        except Exception as e:
-            response_message = f"An error occurred: {str(e)}"
+        # Add a Message to a Thread
+        client.beta.threads.messages.create(
+            thread_id=my_thread.id,
+            role="user",
+            content=user_input,
+        )
+
+        # Run the Assistant
+        my_run = client.beta.threads.runs.create(
+            thread_id=my_thread.id,
+            assistant_id=noeldekegpt.id,
+        )
+
+        # Check the status of the run
+        while my_run.status in ["queued", "in_progress"]:
+            my_run = client.beta.threads.runs.retrieve(
+                thread_id=my_thread.id,
+                run_id=my_run.id
+            )
+            time.sleep(0.5)  # A brief pause to prevent rapid polling
+
+            if my_run.status == "completed":
+                # Retrieve the Messages added by the Assistant to the Thread
+                all_messages = client.beta.threads.messages.list(thread_id=my_thread.id)
+                response_message = all_messages.data[0].content[0].text.value
+                # Get rid of square brackets (Quellen)
+                response_message = re.sub(r'\【.*?\】', '', response_message)
+                # Markdown -> HTML
+                response_message = markdown2.markdown(response_message)
+                print(f'{response_message = }')
+                break
+
 
     return render(request, 'chat/index.html', {'user_input': user_input, 'response': response_message})

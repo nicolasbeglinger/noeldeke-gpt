@@ -22,8 +22,9 @@
         padding: 10px;
         margin: 10px 0;
         border: 1px solid #ddd;
-        border-radius: 4px;
+        border-radius: 10px;
         box-sizing: border-box; /* So that width includes padding */
+        font-size: 16px; /* Setzt die Schriftgröße */
     }
 
     button {
@@ -33,6 +34,7 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        font-size: 16px
     }
 
     button:hover {
@@ -49,16 +51,27 @@
         width: 80%;
         margin-left: auto;
         margin-right: auto;
+        font-size: 16px; /* Setzt die Schriftgröße für Frage und Antwort */
     }
 </style>
-
 <html>
 <head>
     <title>NöldekeGPT</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector("textarea[name='user_input']").addEventListener("keypress", function(e) {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault(); // Verhindert den Standard-Enter-Tasten-Effekt in Textbereichen (Zeilenumbruch)
+                    document.querySelector("form").submit(); // Sendet das Formular
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>NöldekeGPT</h1>
-    <h2>Ich helfe Gästen des Nöldeke in Braunwald mit Informationen aus dem Handbuch (Version: 4.3). Verbesserungsvorschläge können gerne Nicolas gemeldet werden.</h2>
+    <h2>Ich helfe Gästen des Nöldeke in Braunwald mit Informationen aus dem Handbuch (Version: 4.3).</h2> 
+    <p>Das laden der Antwort dauert leider einen Moment. Sie wird mit ChatGPT 4 abgefragt.<br>Andere Verbesserungsvorschläge können gerne Nicolas gemeldet werden.</p>
     <form method="post">
         {% csrf_token %}
         <textarea name="user_input" placeholder="Frag mich etwas..." rows="4" cols="50"></textarea>
@@ -68,7 +81,7 @@
         <p>Frage: {{ user_input }}</p>
     </div>
     <div class="message-box">
-        <p>Antwort: {{ response }}</p>
+        <p>Antwort: {{ response|safe }}</p>
     </div>
 </body>
 </html>
