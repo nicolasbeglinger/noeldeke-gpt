@@ -84,4 +84,18 @@
         <p>Antwort: {{ response|safe }}</p>
     </div>
 </body>
+
+<!-- Anzeigen vergangener Anfragen -->
+<div style="height: 50px;"></div>
+<div class="past-questions">
+    <h2>Vergangene Anfragen</h2>
+    {% for qna in past_questions %}
+        <div class="message-box">
+            <p><strong>Frage:</strong> {{ qna.question }}</p>
+            <p><strong>Antwort:</strong> {{ qna.answer|safe }}</p>
+            <p><em>Gefragt am {{ qna.timestamp|date:"d M Y H:i" }}</em></p>
+        </div>
+    {% endfor %}
+</div>
+
 </html>

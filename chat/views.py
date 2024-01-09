@@ -4,6 +4,7 @@ from openai import OpenAI
 import time
 import markdown2
 import re
+from .models import QnA
 
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -12,6 +13,8 @@ def index(request):
     response_message = ""
     user_input = ""
 
+    thread_id = request.session.get('thread_id')
+
     if request.method == "POST":
         user_input = request.POST.get('user_input')
         print("user_input: ", user_input)
@@ -19,8 +22,16 @@ def index(request):
         # Create an Assistant
         noeldekegpt = client.beta.assistants.retrieve("asst_aXieuBEQXmx4yovAGO7VYzxL")
 
-        # Create a Thread
-        my_thread = client.beta.threads.create()
+
+        if not thread_id:
+            # Create a new thread if none exists
+            my_thread = client.beta.threads.create()
+            thread_id = my_thread.id
+            request.session['thread_id'] = thread_id
+        else:
+            # Use the existing thread
+            my_thread = client.beta.threads.retrieve(thread_id=thread_id)
+
 
         # Add a Message to a Thread
         client.beta.threads.messages.create(
@@ -53,6 +64,16 @@ def index(request):
                 response_message = markdown2.markdown(response_message)
                 print(f'{response_message = }')
                 break
+        # response_message = "answer"
 
 
-    return render(request, 'chat/index.html', {'user_input': user_input, 'response': response_message})
+    # Speichern der Frage und Antwort
+    qna_record = QnA(question=user_input, answer=response_message)
+    qna_record.save()
+    # Abrufen aller vergangenen QnA-Datensätze
+    past_questions = QnA.objects.all().order_by('-timestamp')  # Neueste zuerst
+    return render(request, 'chat/index.html', {
+        'user_input': user_input,
+        'response': response_message,
+        'past_questions': past_questions,
+        })
