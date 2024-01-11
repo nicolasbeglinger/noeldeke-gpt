@@ -62,14 +62,16 @@ def index(request):
                 response_message = re.sub(r'\【.*?\】', '', response_message)
                 # Markdown -> HTML
                 response_message = markdown2.markdown(response_message)
+                
+                # Speichern der Frage und Antwort
+                qna_record = QnA(question=user_input, answer=response_message)
+                qna_record.save()
+                
                 print(f'{response_message = }')
                 break
         # response_message = "answer"
 
 
-    # Speichern der Frage und Antwort
-    qna_record = QnA(question=user_input, answer=response_message)
-    qna_record.save()
     # Abrufen aller vergangenen QnA-Datensätze
     past_questions = QnA.objects.all().order_by('-timestamp')  # Neueste zuerst
     return render(request, 'chat/index.html', {
