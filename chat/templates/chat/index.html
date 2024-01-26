@@ -1,101 +1,76 @@
+{% load static %}
 <!DOCTYPE html>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        color: #333;
-        text-align: center;
-        padding: 20px;
-    }
-
-    h1, h2 {
-        color: #444;
-    }
-
-    form {
-        margin: 20px auto;
-        width: 80%;
-    }
-
-    textarea {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        box-sizing: border-box; /* So that width includes padding */
-        font-size: 16px; /* Setzt die Schriftgröße */
-    }
-
-    button {
-        background-color: #5cb85c;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px
-    }
-
-    button:hover {
-        background-color: #4cae4c;
-    }
-
-    .message-box {
-        background-color: white;
-        border: 2px solid #ddd;
-        border-radius: 10px;
-        padding: 10px;
-        margin: 10px 0;
-        text-align: left;
-        width: 80%;
-        margin-left: auto;
-        margin-right: auto;
-        font-size: 16px; /* Setzt die Schriftgröße für Frage und Antwort */
-    }
-</style>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'chat/style.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'chat/favicon.png' %}" >
     <title>NöldekeGPT</title>
+</head>
+<body>
+    <!-- Hamburger Menu -->
+    <button class="hamburger">&#9776; </button>
+    <div class="menu">
+        <div style="height: 90px;"></div>
+        <a href="{% url 'tipps_tricks' %}">Tipps & Tricks</a>
+    </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            document.querySelector("textarea[name='user_input']").addEventListener("keypress", function(e) {
-                if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault(); // Verhindert den Standard-Enter-Tasten-Effekt in Textbereichen (Zeilenumbruch)
-                    document.querySelector("form").submit(); // Sendet das Formular
+            document.querySelector('.hamburger').addEventListener('click', function(e) {
+                this.classList.toggle('rotate');
+                document.body.classList.toggle('menu-open');
+                e.stopPropagation();
+            });
+            document.querySelector('.page-content').addEventListener('click', function() {
+                if (document.body.classList.contains('menu-open')) {
+                    document.body.classList.remove('menu-open');
                 }
+            });
+            document.querySelector('.menu').addEventListener('click', function(e) {
+                e.stopPropagation();
             });
         });
     </script>
-</head>
-<body>
-    <h1>NöldekeGPT</h1>
-    <h2>Ich helfe Gästen des Nöldeke in Braunwald mit Informationen aus dem Handbuch (Version: 4.6) und anderen Dokumenten.</h2> 
-    <p>Hab Geduld! Das laden der Antwort dauert leider einen Moment. Sie wird mit ChatGPT4 abgefragt. Andere Verbesserungsvorschläge können gerne Nicolas gemeldet werden.</p>
-    <form method="post">
-        {% csrf_token %}
-        <textarea name="user_input" placeholder="Frag mich etwas..." rows="4" cols="50"></textarea>
-        <button type="submit">Send</button>
-    </form>
-    <div class="message-box">
-        <p>Frage: {{ user_input }}</p>
-    </div>
-    <div class="message-box">
-        <p>Antwort: {{ response|safe }}</p>
-    </div>
-</body>
+    <div class="page-content">
+        <!-- head -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelector("textarea[name='user_input']").addEventListener("keypress", function(e) {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        document.querySelector("form").submit();
+                    }
+                });
+            });
+        </script>
+        
+        
+        <h1>NöldekeGPT</h1>
+        <h2>Ich helfe Gästen des Nöldeke in Braunwald mit Informationen aus dem Handbuch (Version: 4.6) und anderen Dokumenten.</h2> 
+        <p>Hab Geduld! Das Laden der Antwort dauert leider einen Moment. Sie wird mit ChatGPT4 abgefragt. Andere Verbesserungsvorschläge können gerne Nicolas gemeldet werden.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <textarea name="user_input" placeholder="Frag mich etwas..." rows="4" cols="50"></textarea>
+            <button type="submit">Send</button>
+        </form>
+        
+        <div class="message-box">
+            <p><strong>Frage:</strong> {{ user_input }}</p>
+            <p><strong>Antwort:</strong> {{ response|safe }}</p>
+        </div>
+        
+        <div style="height: 50px;"></div>
+        
 
-<!-- Anzeigen vergangener Anfragen -->
-<div style="height: 50px;"></div>
-<div class="past-questions">
-    <h2>Vergangene Anfragen</h2>
-    {% for qna in past_questions %}
+        <h2>Vergangene Anfragen</h2>
+        {% for qna in past_questions %}
         <div class="message-box">
             <p><strong>Frage:</strong> {{ qna.question }}</p>
             <p><strong>Antwort:</strong> {{ qna.answer|safe }}</p>
             <p><em>Gefragt am {{ qna.timestamp|date:"d M Y H:i" }}</em></p>
         </div>
-    {% endfor %}
-</div>
+        {% endfor %}
 
+    </div>
+</body>
 </html>

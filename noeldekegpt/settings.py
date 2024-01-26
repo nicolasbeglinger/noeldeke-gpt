@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'chat',
 ]
 
-OPENAI_API_KEY = ''
+OPENAI_API_KEY = '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'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -118,7 +118,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

@@ -73,9 +73,12 @@ def index(request):
 
 
     # Abrufen aller vergangenen QnA-Datensätze
-    past_questions = QnA.objects.all().order_by('-timestamp')  # Neueste zuerst
+    past_questions = QnA.objects.all().order_by('-timestamp')[1:]  # Neueste zuerst
     return render(request, 'chat/index.html', {
         'user_input': user_input,
         'response': response_message,
         'past_questions': past_questions,
         })
+
+def tipps_tricks(request):
+    return render(request, 'tipps_tricks.html')
