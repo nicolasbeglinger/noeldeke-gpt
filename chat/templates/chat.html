@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-content">
+    <!-- head -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector("textarea[name='user_input']").addEventListener("keypress", function(e) {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    document.querySelector("form").submit();
+                }
+            });
+        });
+    </script>
+    
+    
+    <h1>NöldekeGPT</h1>
+    <h2>Ich helfe Gästen des Nöldeke in Braunwald mit Informationen aus dem Handbuch (Version: 4.6) und anderen Dokumenten.</h2> 
+    <p>Hab Geduld! Das Laden der Antwort dauert leider einen Moment. Sie wird mit ChatGPT4 abgefragt. Andere Verbesserungsvorschläge können gerne Nicolas gemeldet werden.</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="user_input" placeholder="Frag mich etwas..." rows="4" cols="50"></textarea>
+        <button type="submit">Send</button>
+    </form>
+    
+    <div class="message-box">
+        <p><strong>Frage:</strong> {{ user_input }}</p>
+        <p><strong>Antwort:</strong> {{ response|safe }}</p>
+    </div>
+    
+    <div style="height: 50px;"></div>
+    
+    
+    <h2>Vergangene Anfragen</h2>
+    {% for qna in past_questions %}
+    <div class="message-box">
+        <p><strong>Frage:</strong> {{ qna.question }}</p>
+        <p><strong>Antwort:</strong> {{ qna.answer|safe }}</p>
+        <p><em>Gefragt am {{ qna.timestamp|date:"d M Y H:i" }}</em></p>
+    </div>
+    {% endfor %}
+    
+</div>
+{% endblock %}

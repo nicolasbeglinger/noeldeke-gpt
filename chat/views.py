@@ -5,11 +5,17 @@ import time
 import markdown2
 import re
 from .models import QnA
+import random
+import os
+import datetime
+from datetime import datetime
+import datetime
+import locale
 
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
-def index(request):
+def chat(request):
     response_message = ""
     user_input = ""
 
@@ -77,7 +83,7 @@ def index(request):
         past_questions = QnA.objects.all().order_by('-timestamp')
     else:
         past_questions = QnA.objects.all().order_by('-timestamp')[1:]  # Neueste zuerst
-    return render(request, 'chat/index.html', {
+    return render(request, 'chat.html', {
         'user_input': user_input,
         'response': response_message,
         'past_questions': past_questions,
@@ -85,3 +91,22 @@ def index(request):
 
 def tipps_tricks(request):
     return render(request, 'tipps_tricks.html')
+
+def milchkalender(request):
+    # Set the locale to German
+    locale.setlocale(locale.LC_TIME, 'de_DE')
+
+    with open(os.path.join(settings.BASE_DIR, "chat", "data", "milch_daten_2024.txt"), "r") as f:
+        data = f.readlines()[1:]
+        data = [d.strip() for d in data]
+
+    future_milk_dates = []
+    # Compare dates
+    for date_str in data:
+        date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+        if date_obj.date() > datetime.datetime.now().date():
+            future_milk_dates.append(date_obj.date().strftime("%A, %d. %B %Y"))
+
+    current_date = datetime.datetime.now().strftime("%A, %d. %B %Y")
+
+    return render(request, 'milchkalender.html', {'future_milk_dates': future_milk_dates[:5], 'current_date': current_date})

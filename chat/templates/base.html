@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'chat/style.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'chat/favicon.png' %}" >
+    <title>NöldekeGPT</title>
+</head>
+<body>
+    <!-- Hamburger Menu -->
+    <button class="hamburger">&#9776; </button>
+    <div class="menu">
+        <div style="height: 90px;"></div>
+        <a href="{% url 'chat' %}">NoeldekeGPT</a>
+        <a href="{% url 'milchkalender' %}">Milchkalender</a>
+        <a href="{% url 'tipps_tricks' %}">Tipps & Tricks</a>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector('.hamburger').addEventListener('click', function(e) {
+                this.classList.toggle('rotate');
+                document.body.classList.toggle('menu-open');
+                e.stopPropagation();
+            });
+            document.querySelector('.page-content').addEventListener('click', function() {
+                if (document.body.classList.contains('menu-open')) {
+                    document.body.classList.remove('menu-open');
+                }
+            });
+            document.querySelector('.menu').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
+    {% block content %}{% endblock %}
+</body>
+</html>

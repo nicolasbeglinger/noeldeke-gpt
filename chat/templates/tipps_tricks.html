@@ -1,38 +1,7 @@
-<!-- FILEPATH: /Users/nicibe/CodingProjects/noeldekegpt/chat/templates/hello_world.html -->
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="{% static 'chat/style.css' %}">
-    <link rel="shortcut icon" type="image/png" href="{% static 'chat/favicon.png' %}" >
-    <title>Tipps & Tricks</title>
-</head>
-<body>
-    <!-- Hamburger Menu -->
-    <button class="hamburger">&#9776; </button>
-    <div class="menu">
-        <div style="height: 90px;"></div>
-        <a href="{% url 'index' %}">NoeldekeGPT</a>
-    </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelector('.hamburger').addEventListener('click', function(e) {
-                this.classList.toggle('rotate');
-                document.body.classList.toggle('menu-open');
-                e.stopPropagation();
-            });
-            document.querySelector('.page-content').addEventListener('click', function() {
-                if (document.body.classList.contains('menu-open')) {
-                    document.body.classList.remove('menu-open');
-                }
-            });
-            document.querySelector('.menu').addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        });
-    </script>
+{% extends 'base.html' %}
+
+{% block content %}
     <div class="page-content">
         <h1>Tipps & Tricks</h1>
     </div>
-</body>
-</html>
+{% endblock %}
