@@ -1,8 +1,10 @@
-/* Custom styles to complement Bootstrap */
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
 }
 
+/* Hamburger Menu */
 .hamburger {
     transition: transform 0.3s ease;
     position: fixed;

@@ -3,12 +3,12 @@
 {% block content %}
 <div class="container">
     <h1 class="mt-4 text-left">Milchkalender</h1>
-    <div class="card my-4 text-left">
+    <div class="card my-4">
         <div class="card-body">
             <p><strong>Heutiges Datum:</strong> {{current_date}}</p>
         </div>
     </div>
-    <div class="card my-4 text-left">
+    <div class="card my-4">
         <div class="card-body">
             <p><strong>Die nächsten 5 Milchdaten:</strong></p>
             {% for date in future_milk_dates %}
