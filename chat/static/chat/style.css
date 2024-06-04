@@ -4,17 +4,20 @@ body {
     color: #333;
 }
 
-/* Remove custom styles that might affect alignment */
-
-.page-content {
-    transition: transform 0.5s ease;
+.form-group {
+    margin: 0;
+    padding: 0;
 }
 
-.menu-open .page-content {
-    transform: translateX(160px);
+textarea.form-control {
+    margin: 0;
+    padding: 10px; /* Adjust if necessary */
 }
 
-/* Ensure text-left is properly applied */
-.text-left {
-    text-align: left !important;
+button.btn {
+    margin-top: 10px;
+}
+
+.card {
+    margin-top: 20px; /* Consistent margin for all cards */
 }

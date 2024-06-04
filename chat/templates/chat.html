@@ -10,20 +10,20 @@
     </div>
 
     <div class="row">
-        <div class="col-12 text-left">
+        <div class="col-12">
             <form method="post" class="my-4">
                 {% csrf_token %}
-                <div class="form-group">
-                    <textarea id="userInput" name="user_input" class="form-control" rows="4" placeholder="Frag mich etwas...&#10;Hab Geduld! Das Laden der Antwort dauert leider einen Moment."></textarea>
+                <div class="form-group text-left" style="margin: 0;">
+                    <textarea id="userInput" name="user_input" class="form-control" rows="4" placeholder="Frag mich etwas...&#10;Hab Geduld! Das Laden der Antwort dauert leider einen Moment." style="margin: 0;"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Abschicken</button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Abschicken</button>
             </form>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-12 text-left">
-            <div class="card my-4">
+        <div class="col-12">
+            <div class="card my-4 text-left">
                 <div class="card-body">
                     <p><strong>Frage:</strong> {{ user_input }}</p>
                     <p><strong>Antwort:</strong> {{ response|safe }}</p>
