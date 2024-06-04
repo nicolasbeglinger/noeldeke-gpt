@@ -2,36 +2,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'chat/style.css' %}">
-    <link rel="shortcut icon" type="image/png" href="{% static 'chat/favicon.png' %}" >
+    <link rel="shortcut icon" type="image/png" href="{% static 'chat/favicon.png' %}">
     <title>NöldekeGPT</title>
 </head>
 <body>
-    <!-- Hamburger Menu -->
-    <button class="hamburger">&#9776; </button>
-    <div class="menu">
-        <div style="height: 90px;"></div>
-        <a href="{% url 'chat' %}">NoeldekeGPT</a>
-        <a href="{% url 'milchkalender' %}">Milchkalender</a>
-        <a href="{% url 'tipps_tricks' %}">Tipps & Tricks</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'chat' %}">NöldekeGPT</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'milchkalender' %}">Milchkalender</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tipps_tricks' %}">Tipps & Tricks</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelector('.hamburger').addEventListener('click', function(e) {
-                this.classList.toggle('rotate');
-                document.body.classList.toggle('menu-open');
-                e.stopPropagation();
-            });
-            document.querySelector('.page-content').addEventListener('click', function() {
-                if (document.body.classList.contains('menu-open')) {
-                    document.body.classList.remove('menu-open');
-                }
-            });
-            document.querySelector('.menu').addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        });
-    </script>
-    {% block content %}{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
