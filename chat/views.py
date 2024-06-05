@@ -1,3 +1,6 @@
+# chat/views.py
+
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.conf import settings
 from openai import OpenAI
@@ -5,13 +8,9 @@ import time
 import markdown2
 import re
 from .models import QnA
-import random
 import os
 import datetime
-from datetime import datetime
-import datetime
 import locale
-
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
@@ -24,10 +23,11 @@ def chat(request):
     if request.method == "POST":
         user_input = request.POST.get('user_input')
         print("user_input: ", user_input)
+        date_string = f"Heutiges Datum: {datetime.datetime.now().strftime("%A, %d. %B %Y, %H:%M")}"
+
 
         # Create an Assistant
         noeldekegpt = client.beta.assistants.retrieve("asst_aXieuBEQXmx4yovAGO7VYzxL")
-
 
         if not thread_id:
             # Create a new thread if none exists
@@ -38,12 +38,11 @@ def chat(request):
             # Use the existing thread
             my_thread = client.beta.threads.retrieve(thread_id=thread_id)
 
-
         # Add a Message to a Thread
         client.beta.threads.messages.create(
             thread_id=my_thread.id,
             role="user",
-            content=user_input,
+            content=date_string + user_input,
         )
 
         # Run the Assistant
@@ -69,25 +68,22 @@ def chat(request):
                 # Markdown -> HTML
                 response_message = markdown2.markdown(response_message)
                 
-                # Speichern der Frage und Antwort
+                # Save the QnA record
                 qna_record = QnA(question=user_input, answer=response_message)
                 qna_record.save()
-                
+
                 print(f'{response_message = }')
                 break
-        # response_message = "answer"
 
+        return JsonResponse({'message': response_message})
 
-    # Abrufen aller vergangenen QnA-Datensätze
-    if user_input == "":
-        past_questions = QnA.objects.all().order_by('-timestamp')
-    else:
-        past_questions = QnA.objects.all().order_by('-timestamp')[1:]  # Neueste zuerst
+    # Retrieve all past QnA records
+    past_questions = QnA.objects.all().order_by('-timestamp')
     return render(request, 'chat.html', {
         'user_input': user_input,
         'response': response_message,
         'past_questions': past_questions,
-        })
+    })
 
 def tipps_tricks(request):
     return render(request, 'tipps_tricks.html')

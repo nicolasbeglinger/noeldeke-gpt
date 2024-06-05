@@ -11,10 +11,10 @@
 
     <div class="row">
         <div class="col-12">
-            <form method="post" class="my-4">
+            <form method="post" class="my-4" id="chat-form">
                 {% csrf_token %}
                 <div class="form-group">
-                    <textarea id="userInput" name="user_input" class="form-control" rows="4" placeholder="Frag mich etwas...&#10;Hab Geduld! Das Laden der Antwort dauert leider einen Moment."></textarea>
+                    <textarea id="userInput" name="user_input" class="form-control" rows="4" placeholder="Frag mich etwas..."></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Abschicken</button>
             </form>
@@ -22,19 +22,14 @@
     </div>
 
     <div class="row">
-        <div class="col-12">
-            <div class="card my-4">
-                <div class="card-body">
-                    <p><strong>Frage:</strong> {{ user_input }}</p>
-                    <p><strong>Antwort:</strong> {{ response|safe }}</p>
-                </div>
-            </div>
+        <div class="col-12" id="response-container">
+            <!-- Placeholder for new responses -->
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <h3>Vergangene Anfragen</h3>
+            <h2>Vergangene Anfragen</h2>
             {% for qna in past_questions %}
             <div class="card my-4">
                 <div class="card-body">
@@ -47,4 +42,46 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('chat-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+    
+        // Add placeholder box
+        const responseContainer = document.getElementById('response-container');
+        const placeholderCard = document.createElement('div');
+        placeholderCard.className = 'card my-4';
+        placeholderCard.innerHTML = `
+            <div class="card-body">
+                <p><strong>Frage:</strong> ${document.getElementById('userInput').value}</p>
+                <p><strong>Antwort:</strong> <div id="loading-placeholder">
+                    <span class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Laden...</span>
+                    </span>
+                </div></p>
+            </div>
+        `;
+        responseContainer.prepend(placeholderCard);
+    
+        // Submit the form
+        fetch("{% url 'chat' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams(new FormData(this)),
+        }).then(response => response.json()).then(data => {
+            // Create a new element to hold the response message
+            const responseMessage = document.createElement('span');
+            responseMessage.innerHTML = data.message;
+            
+            // Find the loading placeholder
+            const loadingPlaceholder = document.getElementById('loading-placeholder');
+    
+            // Replace the loading placeholder with the actual response message
+            loadingPlaceholder.replaceWith(responseMessage);
+        }).catch(error => console.error('Error:', error));
+    });    
+</script>
 {% endblock %}
