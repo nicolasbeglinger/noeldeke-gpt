@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 text-left">Fundorte des Tages</h1>
+    <div class="card my-4">
+        <div class="card-body">
+            {% for item, place in fundorte %}
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <h5 class="card-title">{{ item }}</h5>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="card-text">{{ place }}</h5>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

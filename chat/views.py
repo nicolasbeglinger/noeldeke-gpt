@@ -9,8 +9,9 @@ import markdown2
 import re
 from .models import QnA
 import os
-import datetime
+from datetime import datetime
 import locale
+import random
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
@@ -24,7 +25,7 @@ def chat(request):
     if request.method == "POST":
         user_input = request.POST.get("user_input")
         print("user_input: ", user_input)
-        date_string = f"Heutiges Datum: {datetime.datetime.now().strftime('%A, %d. %B %Y, %H:%M')}"
+        date_string = f"Heutiges Datum: {datetime.now().strftime('%A, %d. %B %Y, %H:%M')}"
 
         # Create an Assistant
         noeldekegpt = client.beta.assistants.retrieve("asst_aXieuBEQXmx4yovAGO7VYzxL")
@@ -88,9 +89,33 @@ def chat(request):
         },
     )
 
+def daily_fundorte(request):
+    # Set the locale to German
+    locale.setlocale(locale.LC_TIME, "de_DE")
+    with open(
+        os.path.join(settings.BASE_DIR, "chat", "data", "woist.tsv"), "r"
+    ) as f:
+        data = f.readlines()
+        new_list = []
+        for line in data:
+            line = line.strip()
+            if not "\t" in line:
+                line += "\tNA"
 
-def tipps_tricks(request):
-    return render(request, "tipps_tricks.html")
+            new_list.append(line.split("\t"))
+    
+    date_time_str = datetime.now().strftime("%Y%m%d")
+    date_time_int = int(date_time_str)
+
+    random.seed(date_time_int)
+    random.shuffle(new_list)
+
+
+
+    return render(
+        request,
+        "daily_fundorte.html",
+        {"fundorte": new_list[:5]})
 
 
 def milchkalender(request):
@@ -106,14 +131,17 @@ def milchkalender(request):
     future_milk_dates = []
     # Compare dates
     for date_str in data:
-        date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d")
-        if date_obj.date() > datetime.datetime.now().date():
+        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+        if date_obj.date() > datetime.now().date():
             future_milk_dates.append(date_obj.date().strftime("%A, %d. %B %Y"))
 
-    current_date = datetime.datetime.now().strftime("%A, %d. %B %Y")
+    current_date = datetime.now().strftime("%A, %d. %B %Y")
 
     return render(
         request,
         "milchkalender.html",
         {"future_milk_dates": future_milk_dates[:5], "current_date": current_date},
     )
+
+def tipps_tricks(request):
+    return render(request, "tipps_tricks.html")

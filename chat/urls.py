@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.chat, name='chat'),
     path('chat', views.chat, name='chat'),
-    path('tipps_tricks', views.tipps_tricks, name='tipps_tricks'),
+    path("daily_fundorte", views.daily_fundorte, name="daily_fundorte"),
     path("milchkalender", views.milchkalender, name="milchkalender"),
+    path('tipps_tricks', views.tipps_tricks, name='tipps_tricks'),
 ]
