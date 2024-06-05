@@ -6,14 +6,15 @@
     <div class="card my-4">
         <div class="card-body">
             {% for item, place in fundorte %}
-            <div class="row mb-3">
-                <div class="col-md-6">
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-5">
                     <h5 class="card-title">{{ item }}</h5>
                 </div>
-                <div class="col-md-6">
-                    <h5 class="card-text">{{ place }}</h5>
+                <div class="col-md-5">
+                    <p class="card-text">{{ place }}</p>
                 </div>
             </div>
+            <hr class="my-3"/> <!-- Horizontal separator -->
             {% endfor %}
         </div>
     </div>
