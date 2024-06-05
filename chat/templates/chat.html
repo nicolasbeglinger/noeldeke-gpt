@@ -1,11 +1,12 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="container">
     <div class="row">
         <div class="col-12">
             <h1 class="mt-4">NöldekeGPT</h1>
-            <p>Ich helfe Gästen des Nöldeke in Braunwald mit Informationen aus dem Handbuch (Version: 4.6) und anderen Dokumenten.</p> 
+            <p>
+                Ich helfe Gästen des Nöldeke in Braunwald mit Informationen aus
+                dem Handbuch (Version: 4.6) und anderen Dokumenten.
+            </p>
         </div>
     </div>
 
@@ -14,9 +15,17 @@
             <form method="post" class="my-4" id="chat-form">
                 {% csrf_token %}
                 <div class="form-group">
-                    <textarea id="userInput" name="user_input" class="form-control" rows="4" placeholder="Frag mich etwas..."></textarea>
+                    <textarea
+                        id="userInput"
+                        name="user_input"
+                        class="form-control"
+                        rows="4"
+                        placeholder="Frag mich etwas..."
+                    ></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Abschicken</button>
+                <button type="submit" class="btn btn-primary">
+                    Abschicken
+                </button>
             </form>
         </div>
     </div>
@@ -35,7 +44,9 @@
                 <div class="card-body">
                     <p><strong>Frage:</strong> {{ qna.question }}</p>
                     <p><strong>Antwort:</strong> {{ qna.answer|safe }}</p>
-                    <p><em>Gefragt am {{ qna.timestamp|date:"d M Y H:i" }}</em></p>
+                    <p>
+                        <em>Gefragt am {{ qna.timestamp|date:"d M Y H:i" }}</em>
+                    </p>
                 </div>
             </div>
             {% endfor %}
@@ -44,16 +55,21 @@
 </div>
 
 <script>
-    document.getElementById('chat-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-    
-        // Add placeholder box
-        const responseContainer = document.getElementById('response-container');
-        const placeholderCard = document.createElement('div');
-        placeholderCard.className = 'card my-4';
-        placeholderCard.innerHTML = `
+    document
+        .getElementById("chat-form")
+        .addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Add placeholder box
+            const responseContainer =
+                document.getElementById("response-container");
+            const placeholderCard = document.createElement("div");
+            placeholderCard.className = "card my-4";
+            placeholderCard.innerHTML = `
             <div class="card-body">
-                <p><strong>Frage:</strong> ${document.getElementById('userInput').value}</p>
+                <p><strong>Frage:</strong> ${
+                    document.getElementById("userInput").value
+                }</p>
                 <p><strong>Antwort:</strong> <div id="loading-placeholder">
                     <span class="spinner-border text-primary" role="status">
                         <span class="sr-only">Laden...</span>
@@ -61,27 +77,34 @@
                 </div></p>
             </div>
         `;
-        responseContainer.prepend(placeholderCard);
-    
-        // Submit the form
-        fetch("{% url 'chat' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams(new FormData(this)),
-        }).then(response => response.json()).then(data => {
-            // Create a new element to hold the response message
-            const responseMessage = document.createElement('span');
-            responseMessage.innerHTML = data.message;
-            
-            // Find the loading placeholder
-            const loadingPlaceholder = document.getElementById('loading-placeholder');
-    
-            // Replace the loading placeholder with the actual response message
-            loadingPlaceholder.replaceWith(responseMessage);
-        }).catch(error => console.error('Error:', error));
-    });    
+            responseContainer.prepend(placeholderCard);
+
+            // Submit the form
+            fetch("{% url 'chat' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector(
+                        "[name=csrfmiddlewaretoken]"
+                    ).value,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams(new FormData(this)),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Create a new element to hold the response message
+                    const responseMessage = document.createElement("span");
+                    responseMessage.innerHTML = data.message;
+
+                    // Find the loading placeholder
+                    const loadingPlaceholder = document.getElementById(
+                        "loading-placeholder"
+                    );
+
+                    // Replace the loading placeholder with the actual response message
+                    loadingPlaceholder.replaceWith(responseMessage);
+                })
+                .catch((error) => console.error("Error:", error));
+        });
 </script>
 {% endblock %}
