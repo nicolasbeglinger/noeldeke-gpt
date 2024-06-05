@@ -23,7 +23,7 @@ def chat(request):
     if request.method == "POST":
         user_input = request.POST.get('user_input')
         print("user_input: ", user_input)
-        date_string = f"Heutiges Datum: {datetime.datetime.now().strftime("%A, %d. %B %Y, %H:%M")}"
+        date_string = f"Heutiges Datum: {datetime.datetime.now().strftime('%A, %d. %B %Y, %H:%M')}"
 
 
         # Create an Assistant
