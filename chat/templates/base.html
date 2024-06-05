@@ -5,13 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link rel="stylesheet" type="text/css" href="{% static 'chat/style.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'chat/favicon.png' %}">
     <title>NöldekeGPT</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+        }
+        .navbar {
+            background-color: #004085; /* Dark blue background */
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .btn-primary {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'chat' %}">NöldekeGPT</a>
+    <nav class="navbar navbar-expand-lg">
+        <!-- <a class="navbar-brand" href="{% url 'chat' %}">NöldekeGPT</a> -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

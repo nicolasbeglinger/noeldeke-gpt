@@ -1,23 +1,30 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #f8f9fa;
 }
 
-.form-group {
-    margin: 0;
-    padding: 0;
+.navbar {
+    background-color: #004085;
 }
 
-textarea.form-control {
-    margin: 0;
-    padding: 10px; /* Adjust if necessary */
+.navbar-brand, .nav-link {
+    color: #fff !important;
 }
 
-button.btn {
-    margin-top: 10px;
+.btn-primary {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
 }
 
 .card {
-    margin-top: 20px; /* Consistent margin for all cards */
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
 }
