@@ -6,5 +6,6 @@ urlpatterns = [
     path('chat', views.chat, name='chat'),
     path("daily_fundorte", views.daily_fundorte, name="daily_fundorte"),
     path("milchkalender", views.milchkalender, name="milchkalender"),
-    path('tipps_tricks', views.tipps_tricks, name='tipps_tricks'),
+    path('map', views.map, name='map'),
+
 ]

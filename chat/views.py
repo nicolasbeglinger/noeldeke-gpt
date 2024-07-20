@@ -12,6 +12,7 @@ import os
 from datetime import datetime
 import locale
 import random
+from django.shortcuts import render
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
@@ -143,5 +144,5 @@ def milchkalender(request):
         {"future_milk_dates": future_milk_dates[:5], "current_date": current_date},
     )
 
-def tipps_tricks(request):
-    return render(request, "tipps_tricks.html")
+def map(request):
+    return render(request, 'map.html')
