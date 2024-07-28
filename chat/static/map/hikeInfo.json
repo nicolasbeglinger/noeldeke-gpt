@@ -1,18 +1,29 @@
 {
+    "nussbuehl": {
+        "name": "Nussbühl",
+        "difficulty": "Einfach",
+        "length": "1 Stunde",
+        "altChange": "72m / 158m",
+        "description": "Wanderung zum Nussbühl.",
+        "type": "Nur Hinweg",
+        "url": "Noeldeke_Nussbuehl.gpx"
+    },
     "gumen": {
         "name": "Gumen",
         "difficulty": "Mittel",
-        "length": "2 Stunden",
+        "length": "1h 40min",
         "altChange": "548m / 1m",
         "description": "Wanderung auf den Gumen.",
-        "url": "Noeldeke_Gumen.geojson"
+        "type": "Nur Hinweg",
+        "url": "Noeldeke_Gumen.gpx"
     },
     "oberblegisee": {
         "name": "Oberblegisee",
         "difficulty": "Einfach",
-        "length": "2 Stunde",
+        "length": "1h 50min",
         "altChange": "293m / 213m",
         "description": "Wanderung zum Oberblegisee.",
-        "url": "Noeldeke_Oberblegisee.geojson"
+        "type": "Nur Hinweg",
+        "url": "Noeldeke_Oberblegisee.gpx"
     }
 }

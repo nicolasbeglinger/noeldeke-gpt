@@ -8,157 +8,46 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.5.0/gpx.min.js"></script>
     <script
         src="https://cdn.jsdelivr.net/npm/leaflet-tilelayer-swiss@2.3.0/dist/Leaflet.TileLayer.Swiss.umd.js"
         crossorigin
         integrity="sha384-M4p8VfZ8RG6qNiPYA3vOCApQXAlLtnJXVPdydMYPAsvvIDsWp2dqqzF2OEeWWNhy"
     ></script>
-    <body>
-        <div class="card my-4">
-            <div class="card-body">
-                <h3>Wanderungen</h3>
-    
-                <select id="layerSelector">
-                    <option value="">Wähle eine Wanderung</option>
-                    <option value="oberblegisee">Oberblegisee</option>
-                    <option value="gumen">Gumen</option>
-                    <!-- Add more options as needed -->
-                </select>
-            </div>
 
-            <div class="card-body" id="hikeInfo" style="display: none;">
-                <p><strong>Schwierigkeit:</strong> <span id="difficulty"></span></p>
-                <p><strong>Länge:</strong> <span id="length"></span></p>
-                <p><strong>Auf- / Abstieg:</strong> <span id="altChange"></span></p>
-                <p><strong>Beschreibung:</strong> <span id="description"></span></p>
-            </div>
-            
-            
-        </div>
-    </body>
-    
+    <!-- Define the hikeInfoUrl and staticUrl global variables -->
+    <script>
+        var hikeInfoUrl = "{% static 'map/hikeInfo.json' %}";
+        var staticUrl = "{% static 'map/' %}";
+    </script>
 
-        <div class="card my-4">
-            <div class="card-body">
-                <div id="mapid" style="height: 75vh"></div>
-            </div>
+    <div class="card my-4">
+        <div class="card-body">
+            <h3>Wanderungen</h3>
+
+            <select id="layerSelector">
+                <option value="">Wähle eine Wanderung</option>
+                <option value="nussbuehl">Nussbühl</option>
+                <option value="oberblegisee">Oberblegisee</option>
+                <option value="gumen">Gumen</option>
+            </select>
         </div>
 
-        <script>
-            // Define LV95
-            var lv95 = {
-                epsg: "EPSG:2056",
-                def: "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs",
-                resolutions: [
-                    8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2,
-                    1, 0.5, 0.25, 0.125, 0.0625,
-                ],
-                origin: [2420000, 1350000],
-            };
+        <div class="card-body" id="hikeInfo" style="display: none;">
+            <p><strong>Schwierigkeit:</strong> <span id="difficulty"></span></p>
+            <p><strong>Typ:</strong> <span id="type"></span></p>
+            <p><strong>Länge:</strong> <span id="length"></span></p>
+            <p><strong>Auf- / Abstieg:</strong> <span id="altChange"></span></p>
+            <!-- <p><strong>Beschreibung:</strong> <span id="description"></span></p> -->
+        </div>
+    </div>
 
-            var crs = new L.Proj.CRS(lv95.epsg, lv95.def, {
-                resolutions: lv95.resolutions,
-                origin: lv95.origin,
-            });
-            var map = new L.Map("mapid", {
-                crs: crs,
-                maxZoom: 15,
-                minZoom: 10,
-            }).setView(
-                L.CRS.EPSG2056.unproject(L.point(2718572.19, 1200165.34)),
-                13
-            );
+    <div class="card my-4">
+        <div class="card-body">
+            <div id="mapid" style="height: 50vh"></div>
+        </div>
+    </div>
 
-            const url =
-                "https://wms.geo.admin.ch/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities";
-            const mapOptions = {
-                layers: "ch.swisstopo.pixelkarte-farbe",
-            };
-            const wmsLayer = L.tileLayer.wms(url, mapOptions).addTo(map);
-
-            var markers = [
-                { point: L.point(2718572.19, 1200165.34), popup: "Nöldeke" },
-                { point: L.point(2718470.54, 1200117.39), popup: "Tödiblick" },
-                {
-                    point: L.point(2719254.18, 1200724.44),
-                    popup: "Schwettiberg-<br>Lädeli",
-                },
-            ];
-
-            markers.forEach(function (marker, index) {
-                var leafletMarker = L.marker(crs.unproject(marker.point))
-                    .bindPopup(marker.popup)
-                    .addTo(map);
-
-                if (index == 0) {
-                    leafletMarker.openPopup();
-                }
-            });
-            
-            /// Get reference to the dropdown
-            var layerSelector = document.getElementById('layerSelector');
-
-            // Store the current layer
-            var currentLayer;
-
-            // Store hike information globally
-            var hikeInfoData = {};
-
-
-            // Fetch hike information once when the page loads
-            fetch("{% static 'map/hikeInfo.json' %}")
-                .then(response => response.json())
-                .then(data => {
-                    hikeInfoData = data;
-                })
-                .catch(error => console.error('Error loading hike info:', error));
-            
-            function toggleHikeInfo(display) {
-                var hikeInfo = document.getElementById('hikeInfo');
-                
-                hikeInfo.style.display = 'block';
-            }
-
-            function displayHikeInfo(path) {
-                var info = hikeInfoData[path];
-                
-                Object.keys(info).forEach(key => {
-                    var element = document.getElementById(key);
-                    if (element) {
-                        element.textContent = info[key];
-                    }
-                });
-                toggleHikeInfo(true);  // Show hike information
-                return info.url;
-            }
-
-                
-            
-            function loadGeoJSONLayer(url, map) {
-                if (currentLayer) {
-                    map.removeLayer(currentLayer);
-                }
-            
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        currentLayer = L.geoJSON(data).addTo(map);
-                        map.fitBounds(currentLayer.getBounds());
-                    })
-                    .catch(error => console.error('Error loading GeoJSON:', error));
-            }
-            
-
-            layerSelector.addEventListener('change', function() {
-                var path = this.value;  // Get the selected value
-
-                var layerUrl = displayHikeInfo(path);
-                if (layerUrl) {
-                    loadGeoJSONLayer("{% static 'map/' %}" + layerUrl, map);
-                }
-            });
-            
-        </script>
-    </body>
+    <script src="{% static 'map/map.js' %}"></script>
 </div>
 {% endblock %}
