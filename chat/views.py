@@ -143,6 +143,3 @@ def milchkalender(request):
         "milchkalender.html",
         {"future_milk_dates": future_milk_dates[:5], "current_date": current_date},
     )
-
-def map(request):
-    return render(request, 'map.html')

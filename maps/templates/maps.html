@@ -10,15 +10,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.5.0/gpx.min.js"></script>
     <script
-        src="https://cdn.jsdelivr.net/npm/leaflet-tilelayer-swiss@2.3.0/dist/Leaflet.TileLayer.Swiss.umd.js"
-        crossorigin
-        integrity="sha384-M4p8VfZ8RG6qNiPYA3vOCApQXAlLtnJXVPdydMYPAsvvIDsWp2dqqzF2OEeWWNhy"
-    ></script>
+        src="https://cdn.jsdelivr.net/npm/leaflet-tilelayer-swiss@2.3.0/dist/Leaflet.TileLayer.Swiss.umd.js"></script>
 
     <!-- Define the hikeInfoUrl and staticUrl global variables -->
     <script>
-        var hikeInfoUrl = "{% static 'map/hikeInfo.json' %}";
-        var staticUrl = "{% static 'map/' %}";
+        var hikeInfoUrl = "{% static 'maps/hikeInfo.json' %}";
+        var staticUrl = "{% static 'maps/' %}";
     </script>
 
     <div class="card my-4">
@@ -48,6 +45,6 @@
         </div>
     </div>
 
-    <script src="{% static 'map/map.js' %}"></script>
+    <script src="{% static 'maps/maps.js' %}"></script>
 </div>
 {% endblock %}
