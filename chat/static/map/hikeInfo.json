@@ -1,0 +1,18 @@
+{
+    "gumen": {
+        "name": "Gumen",
+        "difficulty": "Mittel",
+        "length": "2 Stunden",
+        "altChange": "548m / 1m",
+        "description": "Wanderung auf den Gumen.",
+        "url": "Noeldeke_Gumen.geojson"
+    },
+    "oberblegisee": {
+        "name": "Oberblegisee",
+        "difficulty": "Einfach",
+        "length": "2 Stunde",
+        "altChange": "293m / 213m",
+        "description": "Wanderung zum Oberblegisee.",
+        "url": "Noeldeke_Oberblegisee.geojson"
+    }
+}

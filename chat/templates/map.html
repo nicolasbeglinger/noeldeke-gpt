@@ -13,9 +13,37 @@
         crossorigin
         integrity="sha384-M4p8VfZ8RG6qNiPYA3vOCApQXAlLtnJXVPdydMYPAsvvIDsWp2dqqzF2OEeWWNhy"
     ></script>
-
     <body>
-        <div id="mapid" style="height: 75vh"></div>
+        <div class="card my-4">
+            <div class="card-body">
+                <h3>Wanderungen</h3>
+    
+                <select id="layerSelector">
+                    <option value="">Wähle eine Wanderung</option>
+                    <option value="oberblegisee">Oberblegisee</option>
+                    <option value="gumen">Gumen</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+
+            <div class="card-body" id="hikeInfo" style="display: none;">
+                <p><strong>Schwierigkeit:</strong> <span id="difficulty"></span></p>
+                <p><strong>Länge:</strong> <span id="length"></span></p>
+                <p><strong>Auf- / Abstieg:</strong> <span id="altChange"></span></p>
+                <p><strong>Beschreibung:</strong> <span id="description"></span></p>
+            </div>
+            
+            
+        </div>
+    </body>
+    
+
+        <div class="card my-4">
+            <div class="card-body">
+                <div id="mapid" style="height: 75vh"></div>
+            </div>
+        </div>
+
         <script>
             // Define LV95
             var lv95 = {
@@ -66,58 +94,70 @@
                     leafletMarker.openPopup();
                 }
             });
+            
+            /// Get reference to the dropdown
+            var layerSelector = document.getElementById('layerSelector');
 
-            // Define the routes object and layer control
-            var routes = {};
-            var layerControl = L.control
-                .layers(null, routes, { collapsed: false, position: "topleft" })
-                .addTo(map);
+            // Store the current layer
+            var currentLayer;
 
-            // Add a custom title to the layer control
-            var layerControlContainer = layerControl.getContainer();
-            var layerControlTitle = L.DomUtil.create(
-                "div",
-                "leaflet-control-layers-title"
-            );
-            layerControlTitle.innerHTML = "<strong>Wanderungen</strong>";
-            layerControlContainer.insertBefore(
-                layerControlTitle,
-                layerControlContainer.firstChild
-            );
+            // Store hike information globally
+            var hikeInfoData = {};
 
-            // Function to fetch and add GeoJSON layer
-            function addGeoJsonLayer(path, name, color) {
-                fetch(path)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        var layer = L.geoJSON(data, {
-                            style: {
-                                color: color,
-                                weight: 4,
-                                opacity: 0.6,
-                            },
-                        });
 
-                        // Add layer to routes object and update layer control
-                        routes[name] = layer;
-                        layerControl.addOverlay(layer, name);
-                    })
-                    .catch((err) =>
-                        console.error("Error loading GeoJSON:", err)
-                    );
+            // Fetch hike information once when the page loads
+            fetch("{% static 'map/hikeInfo.json' %}")
+                .then(response => response.json())
+                .then(data => {
+                    hikeInfoData = data;
+                })
+                .catch(error => console.error('Error loading hike info:', error));
+            
+            function toggleHikeInfo(display) {
+                var hikeInfo = document.getElementById('hikeInfo');
+                
+                hikeInfo.style.display = 'block';
             }
 
-            // Add GeoJSON layers
-            addGeoJsonLayer(
-                "{% static 'map/Noeldeke_Oberblegisee.geojson' %}",
-                "Oberblegisee",
-                "blue"
-            );
-            addGeoJsonLayer(
-                "{% static 'map/Noeldeke_Gumen.geojson' %}",
-                "Gumen",
-                "red"
-            );
+            function displayHikeInfo(path) {
+                var info = hikeInfoData[path];
+                
+                Object.keys(info).forEach(key => {
+                    var element = document.getElementById(key);
+                    if (element) {
+                        element.textContent = info[key];
+                    }
+                });
+                toggleHikeInfo(true);  // Show hike information
+                return info.url;
+            }
+
+                
+            
+            function loadGeoJSONLayer(url, map) {
+                if (currentLayer) {
+                    map.removeLayer(currentLayer);
+                }
+            
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        currentLayer = L.geoJSON(data).addTo(map);
+                        map.fitBounds(currentLayer.getBounds());
+                    })
+                    .catch(error => console.error('Error loading GeoJSON:', error));
+            }
+            
+
+            layerSelector.addEventListener('change', function() {
+                var path = this.value;  // Get the selected value
+
+                var layerUrl = displayHikeInfo(path);
+                if (layerUrl) {
+                    loadGeoJSONLayer("{% static 'map/' %}" + layerUrl, map);
+                }
+            });
+            
         </script>
     </body>
 </div>
