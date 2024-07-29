@@ -16,7 +16,7 @@ var crs = new L.Proj.CRS(lv95.epsg, lv95.def, {
 var map = new L.Map("mapid", {
     crs: crs,
     maxZoom: 15,
-    minZoom: 10,
+    minZoom: 9
 }).setView(
     L.CRS.EPSG2056.unproject(L.point(2718572.19, 1200165.34)),
     13

@@ -25,5 +25,23 @@
         "description": "Wanderung zum Oberblegisee.",
         "type": "Nur Hinweg",
         "url": "Noeldeke_Oberblegisee.gpx"
+    },
+    "seblengrat_chnuegrat": {
+        "name": "Seblengrat - Chnügrat",
+        "difficulty": "Mittel",
+        "length": "3h 19min",
+        "altChange": "593m / 593m",
+        "description": "Wanderung auf den Seblengrat. Über den Chnügrat zurück",
+        "type": "Hin- und Rückweg",
+        "url": "Noeldeke_Seblengrat_Chnuegrat.gpx"
+    },
+    "ortstock": {
+        "name": "Ortstock",
+        "difficulty": "Schwer",
+        "length": "4h 40min",
+        "altChange": "1452m / 92m",
+        "description": "Wanderung auf den Ortstock",
+        "type": "Nur Hinweg",
+        "url": "Noeldeke_Ortstock.gpx"
     }
 }
