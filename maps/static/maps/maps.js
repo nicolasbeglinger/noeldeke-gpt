@@ -69,6 +69,20 @@ function toggleHikeInfo(display) {
     hikeInfo.style.display = display ? 'block' : 'none';
 }
 
+function getRouteColor(difficulty) {
+    switch (difficulty) {
+        case "Einfach":
+            return "blue";
+        case "Mittel":
+            return "green";
+        case "Schwer":
+            return "red";
+        default:
+            return "black"; // default color if difficulty is not specified
+    }
+}
+
+
 function displayHikeInfo(path) {
     var info = hikeInfoData[path];
     Object.keys(info).forEach(key => {
@@ -78,10 +92,18 @@ function displayHikeInfo(path) {
         }
     });
     toggleHikeInfo(true);  // Show hike information
-    return info.url;
+    
+    // Update the download link
+    var downloadLink = document.getElementById('downloadLink');
+    var gpxUrl = staticUrl + info.url;
+    downloadLink.href = gpxUrl;
+    
+    return { url: info.url, difficulty: info.difficulty };
 }
 
-function loadGPXLayer(url, map) {
+
+
+function loadGPXLayer(url, color, map) {
     if (currentLayer) {
         map.removeLayer(currentLayer);
     }
@@ -91,6 +113,11 @@ function loadGPXLayer(url, map) {
         gpx_options: {
             parseElements: ['track', 'route']  // Only parse tracks and routes
         },
+        polyline_options: {
+            color: color,  // Set the color based on difficulty
+            weight: 5,
+            opacity: 0.75
+        },
         marker_options: {
             startIconUrl: '',
             endIconUrl: '',
@@ -99,14 +126,19 @@ function loadGPXLayer(url, map) {
         }
     }).on('loaded', function(e) {
         map.fitBounds(e.target.getBounds());
+        // Show the download link
+        document.getElementById('downloadContainer').style.display = 'block';
     }).addTo(map);
 }
 
+
 layerSelector.addEventListener('change', function() {
     var path = this.value;  // Get the selected value
-    var layerUrl = displayHikeInfo(path);
-
-    if (layerUrl) {
-        loadGPXLayer(staticUrl + layerUrl, map);
+    var hikeInfo = displayHikeInfo(path);
+    
+    if (hikeInfo && hikeInfo.url) {
+        var color = getRouteColor(hikeInfo.difficulty);
+        loadGPXLayer(staticUrl + hikeInfo.url, color, map);
     }
 });
+
