@@ -8,9 +8,17 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.5.0/gpx.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/leaflet-tilelayer-swiss@2.3.0/dist/Leaflet.TileLayer.Swiss.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
+    <script src="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.css" />
+
+    <!-- leaflet-ui -->
+	<!-- <script src="https://unpkg.com/leaflet-ui@0.6.0/dist/leaflet-ui.js"></script> -->
+
+	<!-- leaflet-elevation -->
+	<link rel="stylesheet" href="https://unpkg.com/@raruto/leaflet-elevation@2.5.1/dist/leaflet-elevation.min.css" />
+	<script src="https://unpkg.com/@raruto/leaflet-elevation@2.5.1/dist/leaflet-elevation.min.js"></script>
+
 
     <!-- Define the hikeInfoUrl and staticUrl global variables -->
     <script>
@@ -21,7 +29,7 @@
     <div class="card my-4">
         <div class="card-body">
             <h3>Wanderungen</h3>
-
+            
             <select id="layerSelector">
                 <option value="">Wähle eine Wanderung</option>
                 <option value="nussbuehl">Nussbühl</option>
@@ -31,24 +39,23 @@
                 <option value="ortstock">Ortstock</option>
             </select>
         </div>
-
+        
         <div class="card-body" id="hikeInfo" style="display: none;">
             <p><strong>Schwierigkeit:</strong> <span id="difficulty"></span></p>
             <p><strong>Typ:</strong> <span id="type"></span></p>
             <p><strong>Länge:</strong> <span id="length"></span></p>
             <p><strong>Auf- / Abstieg:</strong> <span id="altChange"></span></p>
-            <!-- <p><strong>Beschreibung:</strong> <span id="description"></span></p> -->
-            <div id="downloadContainer">
+            <div id="downloadContainer" style="display: none;">
                 <a id="downloadLink" href="#" download="hike.gpx">Download GPX</a>
             </div>
-            
+            <div class="card-body">
+                <div id="elevation-div"></div>
+            </div>
         </div>
     </div>
 
     <div class="card my-4">
-        <!-- <div class="card-body"> -->
-            <div id="mapid" style="height: 50vh"></div>
-        <!-- </div> -->
+        <div id="mapid" style="height: 50vh"></div>
     </div>
 
     <script src="{% static 'maps/maps.js' %}"></script>

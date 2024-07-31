@@ -48,3 +48,31 @@ body {
     margin-left: 10px;
     margin-right: 10px;
 }
+
+.custom-theme.elevation-control .background {
+    background: none;
+}
+
+.custom-theme.elevation-control .area path.altitude,
+.custom-theme .legend-altitude rect.area {
+    fill-opacity: 0;
+    stroke: #004085;
+    stroke-width: 3;
+}
+
+.custom-theme.elevation-control .grid .tick line {
+    stroke-width: 0;
+}
+
+.elevation-control .axis line,
+.elevation-control .axis path {
+    stroke: var(--ele-axis, #2D1130);
+    stroke-width: 2;
+    fill: none;
+}
+
+.elevation-control .axis text {
+    font-weight: 350;
+    font-size: large;
+    stroke-width: 2px
+}

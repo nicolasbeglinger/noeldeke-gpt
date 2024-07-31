@@ -13,12 +13,13 @@ var crs = new L.Proj.CRS(lv95.epsg, lv95.def, {
     resolutions: lv95.resolutions,
     origin: lv95.origin,
 });
+
 var map = new L.Map("mapid", {
     crs: crs,
     maxZoom: 15,
     minZoom: 9
 }).setView(
-    L.CRS.EPSG2056.unproject(L.point(2718572.19, 1200165.34)),
+    crs.unproject(L.point(2718572.19, 1200165.34)),
     13
 );
 
@@ -47,11 +48,24 @@ markers.forEach(function (marker, index) {
     }
 });
 
+// Elevation Control
+var controlElevation = L.control.elevation({
+    theme: "custom-theme",
+    detached: true,
+    elevationDiv: "#elevation-div",
+    time: false,
+    waypoints: "disabled",
+    wptLabels: false,
+    closeBtn: false,
+    legend: false,
+    downloadLink: false,
+    summary: false,
+    almostOver: true,
+    followMarker: true
+}).addTo(map);
+
 // Get reference to the dropdown
 var layerSelector = document.getElementById('layerSelector');
-
-// Store the current layer
-var currentLayer;
 
 // Store hike information globally
 var hikeInfoData = {};
@@ -67,19 +81,6 @@ fetch(hikeInfoUrl)
 function toggleHikeInfo(display) {
     var hikeInfo = document.getElementById('hikeInfo');
     hikeInfo.style.display = display ? 'block' : 'none';
-}
-
-function getRouteColor(difficulty) {
-    switch (difficulty) {
-        case "Einfach":
-            return "blue";
-        case "Mittel":
-            return "green";
-        case "Schwer":
-            return "red";
-        default:
-            return "black"; // default color if difficulty is not specified
-    }
 }
 
 
@@ -102,43 +103,16 @@ function displayHikeInfo(path) {
 }
 
 
-
-function loadGPXLayer(url, color, map) {
-    if (currentLayer) {
-        map.removeLayer(currentLayer);
-    }
-
-    currentLayer = new L.GPX(url, {
-        async: true,
-        gpx_options: {
-            parseElements: ['track', 'route']  // Only parse tracks and routes
-        },
-        polyline_options: {
-            color: color,  // Set the color based on difficulty
-            weight: 5,
-            opacity: 0.75
-        },
-        marker_options: {
-            startIconUrl: '',
-            endIconUrl: '',
-            shadowUrl: '',
-            wptIcons: {}
-        }
-    }).on('loaded', function(e) {
-        map.fitBounds(e.target.getBounds());
-        // Show the download link
-        document.getElementById('downloadContainer').style.display = 'block';
-    }).addTo(map);
+function loadGPXLayer(url) {
+    // Clear previous elevation data
+    controlElevation.clear();
+    controlElevation.load(url)
 }
+
 
 
 layerSelector.addEventListener('change', function() {
     var path = this.value;  // Get the selected value
     var hikeInfo = displayHikeInfo(path);
-    
-    if (hikeInfo && hikeInfo.url) {
-        var color = getRouteColor(hikeInfo.difficulty);
-        loadGPXLayer(staticUrl + hikeInfo.url, color, map);
-    }
-});
-
+    loadGPXLayer(staticUrl + hikeInfo.url);
+    });
