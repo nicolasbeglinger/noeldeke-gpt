@@ -61,7 +61,7 @@ var controlElevation = L.control.elevation({
     downloadLink: false,
     summary: false,
     almostOver: true,
-    followMarker: true
+    followMarker: true,
 }).addTo(map);
 
 // Get reference to the dropdown
@@ -106,7 +106,10 @@ function displayHikeInfo(path) {
 function loadGPXLayer(url) {
     // Clear previous elevation data
     controlElevation.clear();
-    controlElevation.load(url)
+    controlElevation.load(url);
+
+    // Show the download link
+    document.getElementById('downloadContainer').style.display = 'block';
 }
 
 
@@ -115,4 +118,16 @@ layerSelector.addEventListener('change', function() {
     var path = this.value;  // Get the selected value
     var hikeInfo = displayHikeInfo(path);
     loadGPXLayer(staticUrl + hikeInfo.url);
-    });
+});
+
+// Toggle button functionality
+document.getElementById('toggle-elevation-btn').addEventListener('click', function() {
+    var elevationContainer = document.getElementById('elevation-container');
+    if (elevationContainer.style.display === 'none') {
+        elevationContainer.style.display = 'block';
+        this.textContent = 'Hide Elevation Graph';
+    } else {
+        elevationContainer.style.display = 'none';
+        this.textContent = 'Show Elevation Graph';
+    }
+});

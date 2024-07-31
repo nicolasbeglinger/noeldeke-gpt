@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %}
+{% block content %}
 <div class="container">
     <h1 class="mt-4 text-left">Karte</h1>
     <link
@@ -45,11 +46,12 @@
             <p><strong>Typ:</strong> <span id="type"></span></p>
             <p><strong>Länge:</strong> <span id="length"></span></p>
             <p><strong>Auf- / Abstieg:</strong> <span id="altChange"></span></p>
-            <div id="downloadContainer" style="display: none;">
+            <div id="downloadContainer" class="download-container" style="display: none;">
                 <a id="downloadLink" href="#" download="hike.gpx">Download GPX</a>
             </div>
-            <div class="card-body">
-                <div id="elevation-div"></div>
+            <button id="toggle-elevation-btn" class="btn btn-primary">Show Elevation Graph</button>
+            <div id="elevation-container" style="display: none;">
+                <div id="elevation-div" style="padding: 10px"></div>
             </div>
         </div>
     </div>

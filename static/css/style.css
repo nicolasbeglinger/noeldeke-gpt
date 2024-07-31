@@ -49,6 +49,7 @@ body {
     margin-right: 10px;
 }
 
+/* Customize leaflet-elevation profile with higher specificity */
 .custom-theme.elevation-control .background {
     background: none;
 }
@@ -64,15 +65,13 @@ body {
     stroke-width: 0;
 }
 
-.elevation-control .axis line,
-.elevation-control .axis path {
-    stroke: var(--ele-axis, #2D1130);
-    stroke-width: 2;
-    fill: none;
-}
-
-.elevation-control .axis text {
+/* 
+.custom-theme.elevation-control .axis text {
     font-weight: 350;
-    font-size: large;
-    stroke-width: 2px
+    font-size: larger;
+    stroke-width: 2px;
+} */
+
+.download-container {
+    margin-bottom: 20px; /* Adjust the margin as needed */
 }
