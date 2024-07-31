@@ -125,9 +125,9 @@ document.getElementById('toggle-elevation-btn').addEventListener('click', functi
     var elevationContainer = document.getElementById('elevation-container');
     if (elevationContainer.style.display === 'none') {
         elevationContainer.style.display = 'block';
-        this.textContent = 'Hide Elevation Graph';
+        this.textContent = 'Höhenprofil ausblenden';
     } else {
         elevationContainer.style.display = 'none';
-        this.textContent = 'Show Elevation Graph';
+        this.textContent = 'Höhenprofil einblenden';
     }
 });
