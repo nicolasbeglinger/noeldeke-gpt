@@ -49,11 +49,12 @@ body {
     margin-right: 10px;
 }
 
-/* Customize leaflet-elevation profile with higher specificity */
+/* Get rid of the background */
 .custom-theme.elevation-control .background {
     background: none;
 }
 
+/* clear fill of elevation curve and set curve */
 .custom-theme.elevation-control .area path.altitude,
 .custom-theme .legend-altitude rect.area {
     fill-opacity: 0;
@@ -61,6 +62,7 @@ body {
     stroke-width: 3;
 }
 
+/* disable the grid */
 .custom-theme.elevation-control .grid .tick line {
     stroke-width: 0;
 }
@@ -71,7 +73,25 @@ body {
     font-size: larger;
     stroke-width: 2px;
 } */
+/* Space between download link and button */
 
+/* Add Margin below download link */
 .download-container {
-    margin-bottom: 20px; /* Adjust the margin as needed */
+    margin-bottom: 20px; 
 }
+
+/* Initial styles for hikeInfo and elevation-container with transitions */
+#hikeInfo, #elevation-container {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+    padding: 0 1.25rem; /* match the card-body padding */
+    display: none; /* Initially hide the elements */
+}
+
+#hikeInfo.active, #elevation-container.active {
+    max-height: 800px; /* Adjust this value based on the expected content height */
+    padding: 1.25rem; /* Add padding when active */
+    display: block; /* Ensure they are displayed as block elements */
+}
+

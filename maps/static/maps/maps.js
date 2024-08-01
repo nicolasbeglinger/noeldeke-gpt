@@ -78,10 +78,20 @@ fetch(hikeInfoUrl)
     })
     .catch(error => console.error('Error loading hike info:', error));
 
-function toggleHikeInfo(display) {
-    var hikeInfo = document.getElementById('hikeInfo');
-    hikeInfo.style.display = display ? 'block' : 'none';
-}
+    function toggleHikeInfo(display) {
+        var hikeInfo = document.getElementById('hikeInfo');
+        if (display) {
+            hikeInfo.style.display = 'block'; // Ensure it's displayed before adding transition
+            setTimeout(() => {
+                hikeInfo.classList.add('active');
+            }, 10); // Small delay to trigger the transition
+        } else {
+            hikeInfo.classList.remove('active');
+            setTimeout(() => {
+                hikeInfo.style.display = 'none';
+            }, 500); // Match this delay with the CSS transition duration
+        }
+    }
 
 
 function displayHikeInfo(path) {
@@ -123,11 +133,17 @@ layerSelector.addEventListener('change', function() {
 // Toggle button functionality
 document.getElementById('toggle-elevation-btn').addEventListener('click', function() {
     var elevationContainer = document.getElementById('elevation-container');
-    if (elevationContainer.style.display === 'none') {
-        elevationContainer.style.display = 'block';
-        this.textContent = 'Höhenprofil ausblenden';
-    } else {
-        elevationContainer.style.display = 'none';
+    if (elevationContainer.classList.contains('active')) {
+        elevationContainer.classList.remove('active');
+        setTimeout(() => {
+            elevationContainer.style.display = 'none';
+        }, 500); // Match this delay with the CSS transition duration
         this.textContent = 'Höhenprofil einblenden';
+    } else {
+        elevationContainer.style.display = 'block'; // Ensure it's displayed before adding transition
+        setTimeout(() => {
+            elevationContainer.classList.add('active');
+        }, 10); // Small delay to trigger the transition
+        this.textContent = 'Höhenprofil ausblenden';
     }
 });
