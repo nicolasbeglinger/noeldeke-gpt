@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 text-left">Willkommen!</h1>
+
+
+
+    <a href="{% url 'chat' %}" class="card-link">
+        <div class="card my-4" style="transition: transform 0.2s;">
+            <div class="card-body">
+                <h5 class="card-title">NöldekeGPT</h5>
+                <p class="card-text">Frag die AI nach allem möglichen.</p>
+            </div>
+        </div>
+    </a><a href="{% url 'maps' %}" class="card-link">
+        <div class="card my-4" style="transition: transform 0.2s;">
+            <div class="card-body">
+                <h5 class="card-title">Karte</h5>
+                <p class="card-text">Sieh dir Wanderungen vom Nöldeke an.</p>
+            </div>
+        </div>
+    </a><a href="{% url 'daily_fundorte' %}" class="card-link">
+        <div class="card my-4" style="transition: transform 0.2s;">
+            <div class="card-body">
+                <h5 class="card-title">Fundorte des Tages</h5>
+                <p class="card-text">Hast du dich schon mal gefragt, was es im Nöldeke so alles gibt?</p>
+            </div>
+        </div>
+    </a><a href="{% url 'milchkalender' %}" class="card-link">
+        <div class="card my-4" style="transition: transform 0.2s;">
+            <div class="card-body">
+                <h5 class="card-title">Milchkalender</h5>
+                <p class="card-text">Wann gibt es schon wieder das nächste Mal Milch?</p>
+            </div>
+        </div>
+    </a>
+
+    
+
+
+
+
+</div>
+{% endblock %}
