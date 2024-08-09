@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "misc",
     "chat",
-    "maps"
+    "maps",
+    "woist"
 ]
 
 OPENAI_API_KEY = ""
