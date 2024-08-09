@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     "misc",
     "chat",
     "maps",
-    "woist"
+    "woist",
+    'corsheaders',
 ]
 
 OPENAI_API_KEY = ""
@@ -57,9 +58,17 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://[::]:8000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://beg.ch"
 ]
 
 ROOT_URLCONF = "noeldekegpt.urls"
