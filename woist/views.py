@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 # File path to your JSON file
-json_file_path = os.path.join(settings.BASE_DIR, 'path_to_your_json_file', 'woist.json')
+json_file_path = os.path.join(settings.BASE_DIR, 'woist', 'data',  'woist.json')
 
 def get_json_data(request):
     with open(json_file_path, 'r') as file:
