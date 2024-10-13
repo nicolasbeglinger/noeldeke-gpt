@@ -5,6 +5,9 @@
         Ich helfe Gästen des Nöldeke in Braunwald mit Informationen aus dem
         Handbuch (Version: 4.6) und anderen Dokumenten.
     </p>
+    <p>   
+        Die Seite speichert deine Anfrage und deren Antwort, um anderen weiterzuhelfen und Jacques mitzuteilen, was für Fragen gestellt werden. Falls du nicht möchtest, dass deine Anfrage gespeichert wird, drücke auf den Button "Abschicken ohne Speichern".
+    </p>
 
     <form method="post" id="chat-form" class="my-4">
         {% csrf_token %}
@@ -15,7 +18,9 @@
             rows="4"
             placeholder="Frag mich etwas..."
         ></textarea>
-        <button type="submit" class="btn btn-primary">Abschicken</button>
+        <input type="hidden" id="saveFlag" name="save_flag" value="save">
+        <button id="submit" type="submit" class="btn btn-primary">Abschicken</button>
+        <button id="submit_nosave" type="submit" class="btn btn-secondary">Abschicken ohne Speichern</button>
     </form>
 
     <div id="response-container">
@@ -35,47 +40,51 @@
 </div>
 
 <script>
-    document
-        .getElementById("chat-form")
-        .addEventListener("submit", function (e) {
-            e.preventDefault();
+    document.getElementById("submit").addEventListener("click", function () {
+        document.getElementById("saveFlag").value = "save";
+    });
 
-            const userInput = document.getElementById("userInput").value;
-            const responseContainer =
-                document.getElementById("response-container");
-            const placeholderCard = document.createElement("div");
-            placeholderCard.className = "card my-4";
-            placeholderCard.innerHTML = `
-            <div class="card-body">
-                <p><strong>Frage:</strong> ${userInput}</p>
-                <p><strong>Antwort:</strong> <div id="loading-placeholder">
-                    <span class="spinner-border text-primary" role="status">
-                        <span class="sr-only">Laden...</span>
-                    </span>
-                </div></p>
-            </div>`;
-            responseContainer.prepend(placeholderCard);
+    document.getElementById("submit_nosave").addEventListener("click", function () {
+        document.getElementById("saveFlag").value = "nosave";
+    });
 
-            fetch("{% url 'chat' %}", {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": document.querySelector(
-                        "[name=csrfmiddlewaretoken]"
-                    ).value,
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: new URLSearchParams(new FormData(this)),
+    document.getElementById("chat-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const userInput = document.getElementById("userInput").value;
+        const responseContainer = document.getElementById("response-container");
+
+        // Add loading placeholder
+        const placeholderCard = document.createElement("div");
+        placeholderCard.className = "card my-4";
+        placeholderCard.innerHTML = `
+        <div class="card-body">
+            <p><strong>Frage:</strong> ${userInput}</p>
+            <p><strong>Antwort:</strong> <div id="loading-placeholder">
+                <span class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Laden...</span>
+                </span>
+            </div></p>
+        </div>`;
+        responseContainer.prepend(placeholderCard);
+
+        // Send the request
+        fetch("{% url 'chat' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams(new FormData(this)),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                const responseMessage = document.createElement("span");
+                responseMessage.innerHTML = data.message;
+
+                document.getElementById("loading-placeholder").replaceWith(responseMessage);
             })
-                .then((response) => response.json())
-                .then((data) => {
-                    const responseMessage = document.createElement("span");
-                    responseMessage.innerHTML = data.message;
-
-                    document
-                        .getElementById("loading-placeholder")
-                        .replaceWith(responseMessage);
-                })
-                .catch((error) => console.error("Error:", error));
-        });
+            .catch((error) => console.error("Error:", error));
+    });
 </script>
 {% endblock %}

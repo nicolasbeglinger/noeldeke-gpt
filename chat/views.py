@@ -22,7 +22,8 @@ def chat(request):
 
     if request.method == "POST":
         user_input = request.POST.get("user_input")
-        print("user_input: ", user_input)
+        save_flag = request.POST.get("save_flag")
+
         date_string = f"Heutiges Datum: {datetime.now().strftime('%A, %d. %B %Y, %H:%M')}"
 
         # Create an Assistant
@@ -66,9 +67,10 @@ def chat(request):
                 # Markdown -> HTML
                 response_message = markdown2.markdown(response_message)
 
-                # Save the QnA record
-                qna_record = QnA(question=user_input, answer=response_message)
-                qna_record.save()
+                if save_flag == "save":
+                    # Save the QnA record
+                    qna_record = QnA(question=user_input, answer=response_message)
+                    qna_record.save()
 
                 print(f"{response_message = }")
                 break
