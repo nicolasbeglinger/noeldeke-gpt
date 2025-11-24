@@ -58,22 +58,30 @@ def chat(request):
             )
             time.sleep(0.5)  # A brief pause to prevent rapid polling
 
-            if my_run.status == "completed":
-                # Retrieve the Messages added by the Assistant to the Thread
-                all_messages = client.beta.threads.messages.list(thread_id=my_thread.id)
-                response_message = all_messages.data[0].content[0].text.value
-                # Get rid of square brackets (Quellen)
-                response_message = re.sub(r"\【.*?\】", "", response_message)
-                # Markdown -> HTML
-                response_message = markdown2.markdown(response_message)
+            status = my_run.status
+            match status:
+                case "failed":
+                    raise Warning(my_run)
 
-                if save_flag == "save":
-                    # Save the QnA record
-                    qna_record = QnA(question=user_input, answer=response_message)
-                    qna_record.save()
+                case "completed":
+                    # Retrieve the Messages added by the Assistant to the Thread
+                    all_messages = client.beta.threads.messages.list(thread_id=my_thread.id)
+                    response_message = all_messages.data[0].content[0].text.value
+                    # Get rid of square brackets (Quellen)
+                    response_message = re.sub(r"\【.*?\】", "", response_message)
+                    # Markdown -> HTML
+                    response_message = markdown2.markdown(response_message)
 
-                print(f"{response_message = }")
-                break
+                    if save_flag == "save":
+                        # Save the QnA record
+                        qna_record = QnA(question=user_input, answer=response_message)
+                        qna_record.save()
+
+                    print(f"{response_message = }")
+                    break
+
+                case _:
+                    continue
 
         return JsonResponse({"message": response_message})
 
